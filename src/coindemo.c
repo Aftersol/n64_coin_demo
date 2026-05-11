@@ -91,10 +91,10 @@ int main() {
 
         button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
-        if (button_port_1.d_up || button_port_1.c_up) player_y -= 2;
-        if (button_port_1.d_down || button_port_1.c_down) player_y += 2;
-        if (button_port_1.d_left || button_port_1.c_left) player_x -= 2;
-        if (button_port_1.d_right || button_port_1.c_right) player_x += 2;
+        if (button_port_1.d_up || button_port_1.c_up || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_Y) > 0) player_y -= 2;
+        if (button_port_1.d_down || button_port_1.c_down || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_Y) < 0) player_y += 2;
+        if (button_port_1.d_left || button_port_1.c_left || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_X) < 0) player_x -= 2;
+        if (button_port_1.d_right || button_port_1.c_right || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_X) > 0) player_x += 2;
 
         if (player_x < 0) player_x = 0;
         if (player_x > 320-32) player_x = 320-32;
