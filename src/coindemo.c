@@ -39,7 +39,7 @@
 #define MAX_COINS 10
 
 int main() {
-    int player_x = 0, player_y = 0;
+    int player_x = 320/2-16, player_y = 240/2-16;
     int coin_x[MAX_COINS], coin_y[MAX_COINS];
     unsigned int coin_collected = 0;
     int seed;
