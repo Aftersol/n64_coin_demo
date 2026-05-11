@@ -46,7 +46,7 @@ int main() {
     unsigned int coin_collected = 0;
     int seed;
 
-    debug_init_isviewer();
+    debug_init_emulog();
     debug_init_usblog();
 
     dfs_init(DFS_DEFAULT_LOCATION);
