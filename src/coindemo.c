@@ -77,8 +77,8 @@ int main() {
     rdpq_text_register_font(1, font);
 
     for (int i = 0; i < MAX_COINS; i++) {
-        coin_x[i] = rand() % 320-32;
-        coin_y[i] = rand() % 240-32;
+        coin_x[i] = rand() % (320-32);
+        coin_y[i] = rand() % (240-32);
     }
 
     while (1) {
@@ -118,8 +118,8 @@ int main() {
             if (coin_x[i] != -1 && coin_y[i] != -1) {
                 if (player_x < coin_x[i] + 32.0f && player_x + 32.0f > coin_x[i] &&
                     player_y < coin_y[i] + 32.0f && player_y + 32.0f > coin_y[i]) {
-                    coin_x[i] = rand() % 300 + 10;
-                    coin_y[i] = rand() % 220 + 10;
+                    coin_x[i] = rand() % (320-32);
+                    coin_y[i] = rand() % (240-32);
                     coin_collected++;
                     wav64_play(&coin_sound, 0);
                 }
