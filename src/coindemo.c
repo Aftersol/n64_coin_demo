@@ -41,8 +41,8 @@
 #define MAX_COINS 10
 
 int main() {
-    int player_x = 320/2-16, player_y = 240/2-16;
-    int coin_x[MAX_COINS], coin_y[MAX_COINS];
+    float player_x = (320.0f/2.0f)-16.0f, player_y = (240.0f/2.0f)-16.0f;
+    float coin_x[MAX_COINS], coin_y[MAX_COINS];
     unsigned int coin_collected = 0;
     int seed;
 
@@ -84,27 +84,29 @@ int main() {
     while (1) {
         surface_t* disp;
 
-        joypad_buttons_t button_port_1;
+        joypad_inputs_t joypad_port_1 = joypad_get_inputs(JOYPAD_PORT_1);
+        joypad_buttons_t button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
         joypad_poll();
         mixer_try_play();
 
-        button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
+        player_x += (joypad_port_1.stick_x / 85.0f);
+        player_y += (joypad_port_1.stick_y / 85.0f);
 
-        if (button_port_1.d_up || button_port_1.c_up || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_Y) > 0) player_y -= 2;
-        if (button_port_1.d_down || button_port_1.c_down || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_Y) < 0) player_y += 2;
-        if (button_port_1.d_left || button_port_1.c_left || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_X) < 0) player_x -= 2;
-        if (button_port_1.d_right || button_port_1.c_right || joypad_get_axis_held(JOYPAD_PORT_1, JOYPAD_AXIS_STICK_X) > 0) player_x += 2;
+        if (button_port_1.d_up || button_port_1.c_up) player_y -= 2.0f;
+        if (button_port_1.d_down || button_port_1.c_down) player_y += 2.0f;
+        if (button_port_1.d_left || button_port_1.c_left) player_x -= 2.0f;
+        if (button_port_1.d_right || button_port_1.c_right) player_x += 2.0f;
 
-        if (player_x < 0) player_x = 0;
-        if (player_x > 320-32) player_x = 320-32;
-        if (player_y < 0) player_y = 0;
-        if (player_y > 240-32) player_y = 240-32;
+        if (player_x < 0.0f) player_x = 0.0f;
+        if (player_x > 320.0f-32.0f) player_x = 320.0f-32.0f;
+        if (player_y < 0.0f) player_y = 0.0f;
+        if (player_y > 240.0f-32.0f) player_y = 240.0f-32.0f;
 
         for (int i = 0; i < MAX_COINS; i++) {
             if (coin_x[i] != -1 && coin_y[i] != -1) {
-                if (player_x < coin_x[i] + 32 && player_x + 32 > coin_x[i] &&
-                    player_y < coin_y[i] + 32 && player_y + 32 > coin_y[i]) {
+                if (player_x < coin_x[i] + 32.0f && player_x + 32.0f > coin_x[i] &&
+                    player_y < coin_y[i] + 32.0f && player_y + 32.0f > coin_y[i]) {
                     coin_x[i] = rand() % 300 + 10;
                     coin_y[i] = rand() % 220 + 10;
                     coin_collected++;
