@@ -84,7 +84,7 @@ int main() {
         joypad_poll();
         mixer_try_play();
 
-        button_port_1 = joypad_get_buttons_pressed(JOYPAD_PORT_1);
+        button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
         if (button_port_1.d_up || button_port_1.c_up) player_y -= 2;
         if (button_port_1.d_down || button_port_1.c_down) player_y += 2;
