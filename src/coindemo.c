@@ -87,16 +87,27 @@ int main() {
         joypad_inputs_t joypad_port_1 = joypad_get_inputs(JOYPAD_PORT_1);
         joypad_buttons_t button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
+        float speed_x = 0.0f, speed_y = 0.0f;
+
         joypad_poll();
         mixer_try_play();
+        
 
-        player_x += (joypad_port_1.stick_x / 85.0f);
-        player_y += (joypad_port_1.stick_y / 85.0f);
+        speed_x += (joypad_port_1.stick_x / 85.0f) * 2.0f;
+        speed_y -= (joypad_port_1.stick_y / 85.0f) * 2.0f;
 
-        if (button_port_1.d_up || button_port_1.c_up) player_y -= 2.0f;
-        if (button_port_1.d_down || button_port_1.c_down) player_y += 2.0f;
-        if (button_port_1.d_left || button_port_1.c_left) player_x -= 2.0f;
-        if (button_port_1.d_right || button_port_1.c_right) player_x += 2.0f;
+        if (button_port_1.d_up || button_port_1.c_up) speed_y -= 2.0f;
+        if (button_port_1.d_down || button_port_1.c_down) speed_y += 2.0f;
+        if (button_port_1.d_left || button_port_1.c_left) speed_x -= 2.0f;
+        if (button_port_1.d_right || button_port_1.c_right) speed_x += 2.0f;
+
+        if (speed_x > 2.0f) speed_x = 2.0f;
+        if (speed_x < -2.0f) speed_x = -2.0f;
+        if (speed_y > 2.0f) speed_y = 2.0f;
+        if (speed_y < -2.0f) speed_y = -2.0f;
+
+        player_x += speed_x;
+        player_y += speed_y;
 
         if (player_x < 0.0f) player_x = 0.0f;
         if (player_x > 320.0f-32.0f) player_x = 320.0f-32.0f;
