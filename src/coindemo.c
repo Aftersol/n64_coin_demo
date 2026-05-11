@@ -71,7 +71,7 @@ int main() {
     sprite_t* coin = sprite_load("rom:/coin.sprite");
 
     wav64_t coin_sound;
-    wav64_open(&coin_sound, "rom:/coin.wav64");
+    wav64_open(&coin_sound, "rom:/coin_collect.wav64");
 
     rdpq_font_t *font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
     rdpq_text_register_font(1, font);
