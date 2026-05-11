@@ -41,7 +41,7 @@ FILESYSTEM_DIR = filesystem
 assets = $(ASSETS_DIR)/background.png 
 assets += $(ASSETS_DIR)/player.png 
 assets += $(ASSETS_DIR)/coin.png 
-assets += $(ASSETS_DIR)/coin_collect.wav
+assets += $(ASSETS_DIR)/coin.wav64
 
 assets_conv = $(addprefix $(FILESYSTEM_DIR)/,$(notdir $(assets:%.png=%.sprite)))
 
