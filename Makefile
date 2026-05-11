@@ -38,7 +38,7 @@ all: coindemo.z64
 ASSETS_DIR = assets
 FILESYSTEM_DIR = filesystem
 
-assets = $(ASSETS_DIR)/background.png $(ASSETS_DIR)/player.png $(ASSETS_DIR)/coin.png
+assets = $(ASSETS_DIR)/background.png $(ASSETS_DIR)/player.png $(ASSETS_DIR)/coin.png $(ASSETS_DIR)/coin.wav
 
 assets_conv = $(addprefix $(FILESYSTEM_DIR)/,$(notdir $(assets:%.png=%.sprite)))
 
