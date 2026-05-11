@@ -32,6 +32,8 @@
  * Credits:
  *  - hassekf - Tower Defense - Grass Background
  *    https://opengameart.org/content/tower-defense-grass-background
+ *  - Luke.RUSTLTD - 8-bit Coin Sound
+ *    https://opengameart.org/content/10-8bit-coin-sounds
  */
 
 #include <libdragon.h>
@@ -68,6 +70,9 @@ int main() {
     sprite_t* player = sprite_load("rom:/player.sprite");
     sprite_t* coin = sprite_load("rom:/coin.sprite");
 
+    wav64_t coin_sound;
+    wav64_open(&coin_sound, "rom:/coin.wav64");
+
     rdpq_font_t *font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
     rdpq_text_register_font(1, font);
 
@@ -103,6 +108,7 @@ int main() {
                     coin_x[i] = rand() % 300 + 10;
                     coin_y[i] = rand() % 220 + 10;
                     coin_collected++;
+                    wav64_play(&coin_sound, 0);
                 }
             }
         }

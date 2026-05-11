@@ -31,3 +31,4 @@ Everything in the src folder is licensed under MIT License. See [LICENSE page](h
 
 In the assets folder the following assets are in the public domain:
 - [hassekf - Tower Defense - Grass Background](https://opengameart.org/content/tower-defense-grass-background)
+- [Luke.RUSTLTD - 8-bit Coin Sound](https://opengameart.org/content/10-8bit-coin-sounds)
