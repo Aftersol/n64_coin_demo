@@ -1,0 +1,129 @@
+/**
+ * \file coindemo.c
+ * \author Aftersol
+ * \date 2026-05-11
+ * \brief A simple 2D coin collecting game example for libdragon.
+ * 
+ * This is free and unencumbered software released into the public domain.
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <https://unlicense.org>
+ * 
+ * Credits:
+ *  - hassekf - Tower Defense - Grass Background
+ *    https://opengameart.org/content/tower-defense-grass-background
+ */
+
+#include <libdragon.h>
+
+#define MAX_COINS 10
+
+int main() {
+    int player_x = 0, player_y = 0;
+    int coin_x[MAX_COINS], coin_y[MAX_COINS];
+    unsigned int coin_collected = 0;
+    int seed;
+
+    debug_init_isviewer();
+    debug_init_usblog();
+
+    dfs_init(DFS_DEFAULT_LOCATION);
+    display_init(
+        RESOLUTION_320x240,
+        DEPTH_16_BPP,
+        2,
+        GAMMA_NONE,
+        FILTERS_DISABLED
+    );
+
+    joypad_init();
+    rdpq_init();
+    audio_init(48000, 3);
+    mixer_init(32);
+    getentropy(&seed, sizeof(seed));
+    srand(seed);
+    register_VI_handler((void(*)(void))rand);
+
+    sprite_t* background = sprite_load("rom:/background.sprite");
+    sprite_t* player = sprite_load("rom:/player.sprite");
+    sprite_t* coin = sprite_load("rom:/coin.sprite");
+
+    rdpq_font_t *font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
+    rdpq_text_register_font(1, font);
+
+    for (int i = 0; i < MAX_COINS; i++) {
+        coin_x[i] = rand() % 320-32;
+        coin_y[i] = rand() % 240-32;
+    }
+
+    while (1) {
+        surface_t* disp;
+
+        joypad_buttons_t button_port_1;
+
+        joypad_poll();
+        mixer_try_play();
+
+        button_port_1 = joypad_get_buttons_pressed(JOYPAD_PORT_1);
+
+        if (button_port_1.d_up || button_port_1.c_up) player_y -= 2;
+        if (button_port_1.d_down || button_port_1.c_down) player_y += 2;
+        if (button_port_1.d_left || button_port_1.c_left) player_x -= 2;
+        if (button_port_1.d_right || button_port_1.c_right) player_x += 2;
+
+        if (player_x < 0) player_x = 0;
+        if (player_x > 320-32) player_x = 320-32;
+        if (player_y < 0) player_y = 0;
+        if (player_y > 240-32) player_y = 240-32;
+
+        for (int i = 0; i < MAX_COINS; i++) {
+            if (coin_x[i] != -1 && coin_y[i] != -1) {
+                if (player_x < coin_x[i] + 32 && player_x + 32 > coin_x[i] &&
+                    player_y < coin_y[i] + 32 && player_y + 32 > coin_y[i]) {
+                    coin_x[i] = rand() % 300 + 10;
+                    coin_y[i] = rand() % 220 + 10;
+                    coin_collected++;
+                }
+            }
+        }
+
+        while(!(disp = display_try_get())) {;}
+
+        rdpq_attach(disp, NULL);
+        rdpq_set_mode_copy(true);
+        rdpq_sprite_blit(background, 0, 0, NULL);
+        for (int i = 0; i < MAX_COINS; i++) {
+            rdpq_sprite_blit(coin, coin_x[i], coin_y[i], NULL);
+        }
+        rdpq_sprite_blit(player, player_x, player_y, NULL);
+        rdpq_set_mode_standard();
+                    rdpq_text_printf(&(rdpq_textparms_t) {
+                    .width = 320-32,
+                    .align = ALIGN_LEFT,
+                    .wrap = WRAP_WORD,
+        }, 1, 32, 32, "Coins: %u", coin_collected);
+
+        rdpq_detach_show();
+
+    }
+}
