@@ -1,6 +1,8 @@
 # N64 2D Coin Example
 
-An N64 program that showcases an example of a 2D coin collecting game.
+https://github.com/user-attachments/assets/d076911a-37df-4692-8f60-430528ab5daf
+
+An N64 program that showcases an example 2D coin collecting game.
 
 ## How to Build N64 Minimal Menu Example
 This tutorial assumes you have your N64 Toolchain set up including GCC for MIPS.
