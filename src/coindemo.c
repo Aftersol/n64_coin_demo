@@ -39,17 +39,17 @@
 #include <libdragon.h>
 
 #define MAX_COINS 10
+const float speed = 2.0f;
 
 int main() {
     float player_x, player_y;
     float coin_x[MAX_COINS], coin_y[MAX_COINS];
     unsigned int coin_collected = 0;
-    int seed;
+    int seed; // For random number generator
 
     debug_init_emulog();
     debug_init_usblog();
 
-    dfs_init(DFS_DEFAULT_LOCATION);
     display_init(
         RESOLUTION_320x240,
         DEPTH_16_BPP,
@@ -58,10 +58,13 @@ int main() {
         FILTERS_DISABLED
     );
 
+    dfs_init(DFS_DEFAULT_LOCATION);
     joypad_init();
     rdpq_init();
     audio_init(48000, 3);
     mixer_init(32);
+
+    // Random number generator initialization
     getentropy(&seed, sizeof(seed));
     srand(seed);
     register_VI_handler((void(*)(void))rand);
@@ -75,9 +78,12 @@ int main() {
 
     rdpq_font_t *font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
     rdpq_text_register_font(1, font);
+
+    // Center player to center of screen
     player_x = (320.0f/2.0f)-player->width/2.0f;
     player_y = (240.0f/2.0f)-player->height/2.0f;
 
+    // Scatter coins throughout the screen
     for (int i = 0; i < MAX_COINS; i++) {
         coin_x[i] = rand() % (320-coin->width);
         coin_y[i] = rand() % (240-coin->height);
@@ -92,41 +98,58 @@ int main() {
         float speed_x = 0.0f, speed_y = 0.0f;
 
         joypad_poll();
-        mixer_try_play();
+        mixer_try_play(); // Required for playing sound
         
-        speed_x += (joypad_port_1.stick_x / 85.0f) * 2.0f;
-        speed_y -= (joypad_port_1.stick_y / 85.0f) * 2.0f;
+        // 85.0f was picked because it is the practical maximum number when 
+        // the joystick is shifted all the way in one direction
 
-        if (button_port_1.d_up || button_port_1.c_up) speed_y -= 2.0f;
-        if (button_port_1.d_down || button_port_1.c_down) speed_y += 2.0f;
-        if (button_port_1.d_left || button_port_1.c_left) speed_x -= 2.0f;
-        if (button_port_1.d_right || button_port_1.c_right) speed_x += 2.0f;
+        speed_x += (joypad_port_1.stick_x / 85.0f) * speed;
+        speed_y -= (joypad_port_1.stick_y / 85.0f) * speed;
 
-        if (speed_x > 2.0f) speed_x = 2.0f;
-        if (speed_x < -2.0f) speed_x = -2.0f;
-        if (speed_y > 2.0f) speed_y = 2.0f;
-        if (speed_y < -2.0f) speed_y = -2.0f;
+        if (button_port_1.d_up || button_port_1.c_up) speed_y -= speed;
+        if (button_port_1.d_down || button_port_1.c_down) speed_y += speed;
+        if (button_port_1.d_left || button_port_1.c_left) speed_x -= speed;
+        if (button_port_1.d_right || button_port_1.c_right) speed_x += speed;
+
+        // Clamp speed to make sure player don't go too fast
+        if (speed_x > speed) speed_x = speed;
+        if (speed_x < -speed) speed_x = -speed;
+        if (speed_y > speed) speed_y = speed;
+        if (speed_y < -speed) speed_y = -speed;
 
         player_x += speed_x;
         player_y += speed_y;
 
-        if (player_x < 0.0f) player_x = 0.0f;
-        if (player_x > 320.0f - (float)player->width) player_x = 320.0f - (float)player->width;
-        if (player_y < 0.0f) player_y = 0.0f;
-        if (player_y > 240.0f - (float)player->height) player_y = 240.0f - (float)player->height;
+        // Clamp player position to prevent player from leaving screen
+        if (player_x < 0.0f)
+            player_x = 0.0f;
 
+        if (player_x > 320.0f - (float)player->width)
+            player_x = 320.0f - (float)player->width;
+
+        if (player_y < 0.0f)
+            player_y = 0.0f;
+
+        if (player_y > 240.0f - (float)player->height)
+            player_y = 240.0f - (float)player->height;
+
+        // Iterate through coins to check if player touches them
         for (int i = 0; i < MAX_COINS; i++) {
-            if (coin_x[i] != -1 && coin_y[i] != -1) {
-                if (!(coin_x[i] > player_x + player->width ||
-                    coin_x[i] + coin->width < player_x ||
-                    coin_y[i] > player_y + player->height ||
-                    coin_y[i] + coin->height < player_y 
-                )) {
-                    coin_x[i] = rand() % (320 - coin->width);
-                    coin_y[i] = rand() % (240 - coin->height);
-                    coin_collected++;
-                    wav64_play(&coin_sound, 0);
-                }
+            // Player-coin 2D box collision code
+            if (!(coin_x[i] > player_x + player->width ||
+                coin_x[i] + coin->width < player_x ||
+                coin_y[i] > player_y + player->height ||
+                coin_y[i] + coin->height < player_y 
+            )) {
+                // Teleports coin to different position
+                coin_x[i] = rand() % (320 - coin->width);
+                coin_y[i] = rand() % (240 - coin->height);
+
+                // Give player a coin anyways
+                coin_collected++;
+
+                // Play a ding sound for feedback
+                wav64_play(&coin_sound, 0);
             }
         }
 
@@ -135,6 +158,7 @@ int main() {
         rdpq_attach(disp, NULL);
         rdpq_set_mode_copy(true);
         rdpq_sprite_blit(background, 0, 0, NULL);
+        // Crude instancing draw coins code
         for (int i = 0; i < MAX_COINS; i++) {
             rdpq_sprite_blit(coin, coin_x[i], coin_y[i], NULL);
         }
@@ -146,7 +170,7 @@ int main() {
                     .wrap = WRAP_WORD,
         }, 1, 32, 32, "Coins: %u", coin_collected);
 
-        rdpq_detach_show();
+        rdpq_detach_show(); // Send the final result to screen to be displayed
 
     }
 }
