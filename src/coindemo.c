@@ -118,10 +118,10 @@ int main() {
 
         for (int i = 0; i < MAX_COINS; i++) {
             if (coin_x[i] != -1 && coin_y[i] != -1) {
-                if (player_x + (float)player->width > coin_x[i] - (float)coin->width &&
-                    player_x - (float)player->width < coin_x[i] + (float)coin->width &&
-                    player_y + (float)player->height > coin_y[i] - (float)coin->height &&
-                    player_y - (float)player->height > coin_y[i] + (float)coin->height
+                if (player_x + (float)player->width / 2.0f > coin_x[i] - (float)coin->width / 2.0f &&
+                    player_x - (float)player->width / 2.0f < coin_x[i] + (float)coin->width / 2.0f &&
+                    player_y + (float)player->height / 2.0f > coin_y[i] - (float)coin->height / 2.0f &&
+                    player_y - (float)player->height / 2.0f > coin_y[i] + (float)coin->height / 2.0f
                 ) {
                     coin_x[i] = rand() % (320 - coin->width);
                     coin_y[i] = rand() % (240 - coin->height);
