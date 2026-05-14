@@ -121,7 +121,7 @@ int main() {
                 if (!(coin_x[i] > player_x + player->width ||
                     coin_x[i] + coin->width < player_x ||
                     coin_y[i] > player_y + player->height ||
-                    player_y + player->height < coin_y[i]
+                    coin_y[i] + coin->height < player_y 
                 )) {
                     coin_x[i] = rand() % (320 - coin->width);
                     coin_y[i] = rand() % (240 - coin->height);
