@@ -41,7 +41,7 @@
 #define MAX_COINS 10
 
 int main() {
-    float player_x = (320.0f/2.0f)-16.0f, player_y = (240.0f/2.0f)-16.0f;
+    float player_x, player_y;
     float coin_x[MAX_COINS], coin_y[MAX_COINS];
     unsigned int coin_collected = 0;
     int seed;
@@ -75,10 +75,12 @@ int main() {
 
     rdpq_font_t *font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
     rdpq_text_register_font(1, font);
+    player_x = (320.0f/2.0f)-player->width/2.0f;
+    player_y = (240.0f/2.0f)-player->height/2.0f;
 
     for (int i = 0; i < MAX_COINS; i++) {
-        coin_x[i] = rand() % (320-32);
-        coin_y[i] = rand() % (240-32);
+        coin_x[i] = rand() % (320-coin->width);
+        coin_y[i] = rand() % (240-coin->height);
     }
 
     while (1) {
@@ -110,16 +112,19 @@ int main() {
         player_y += speed_y;
 
         if (player_x < 0.0f) player_x = 0.0f;
-        if (player_x > 320.0f-32.0f) player_x = 320.0f-32.0f;
+        if (player_x > 320.0f - (float)player->width) player_x = 320.0f - (float)player->width;
         if (player_y < 0.0f) player_y = 0.0f;
-        if (player_y > 240.0f-32.0f) player_y = 240.0f-32.0f;
+        if (player_y > 240.0f - (float)player->height) player_y = 240.0f - (float)player->height;
 
         for (int i = 0; i < MAX_COINS; i++) {
             if (coin_x[i] != -1 && coin_y[i] != -1) {
-                if (player_x < coin_x[i] + 32.0f && player_x + 32.0f > coin_x[i] &&
-                    player_y < coin_y[i] + 32.0f && player_y + 32.0f > coin_y[i]) {
-                    coin_x[i] = rand() % (320-32);
-                    coin_y[i] = rand() % (240-32);
+                if (player_x + (float)player->width > coin_x[i] - (float)coin->width &&
+                    player_x - (float)player->width < coin_x[i] + (float)coin->width &&
+                    player_y + (float)player->height > coin_y[i] - (float)coin->height &&
+                    player_y - (float)player->height > coin_y[i] + (float)coin->height
+                ) {
+                    coin_x[i] = rand() % (320 - coin->width);
+                    coin_y[i] = rand() % (240 - coin->height);
                     coin_collected++;
                     wav64_play(&coin_sound, 0);
                 }
