@@ -94,7 +94,6 @@ int main() {
         joypad_poll();
         mixer_try_play();
         
-
         speed_x += (joypad_port_1.stick_x / 85.0f) * 2.0f;
         speed_y -= (joypad_port_1.stick_y / 85.0f) * 2.0f;
 
