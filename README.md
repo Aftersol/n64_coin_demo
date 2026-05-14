@@ -1,6 +1,6 @@
 # N64 2D Coin Game Example
 
-https://github.com/user-attachments/assets/d076911a-37df-4692-8f60-430528ab5daf
+https://github.com/user-attachments/assets/a48eeff5-7574-4eb0-89c7-70c0c3e915fb
 
 An N64 program that showcases an example 2D coin collecting game.
 
