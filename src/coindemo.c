@@ -108,6 +108,11 @@ int main() {
         joypad_inputs_t joypad_port_1 = joypad_get_inputs(JOYPAD_PORT_1);
         joypad_buttons_t button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
+        rdpq_blitparms_t background_blit_params = { 
+            .scale_x = background->width / (background->width / disp->width),
+            .scale_y = background->height / (background->height / disp->height)
+        };
+
         float speed_x = 0.0f, speed_y = 0.0f;
 
         while(!(disp = display_try_get())) {;}
@@ -170,7 +175,7 @@ int main() {
 
         rdpq_attach(disp, NULL);
         rdpq_set_mode_copy(true);
-        rdpq_sprite_blit(background, 0, 0, NULL);
+        rdpq_sprite_blit(background, 0, 0, &background_blit_params);
         // Crude instancing draw coins code
         for (int i = 0; i < MAX_COINS; i++) {
             rdpq_sprite_blit(coin, coin_x[i], coin_y[i], NULL);
