@@ -25,6 +25,7 @@
 #
 # For more information, please refer to <https://unlicense.org>
 
+filesystem
 build
 .vscode
 .libdragon
