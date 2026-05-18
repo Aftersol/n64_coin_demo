@@ -38,20 +38,33 @@
 
 #include <libdragon.h>
 
+#include <stdlib.h>
+
 #define MAX_COINS 10
 const float speed = 2.0f;
+
+// Returns a uniform float in [0, 1)
+double uniform_rand() {
+    return (double)rand() / ((double)RAND_MAX + 1.0);
+}
+
+// Returns a uniform float in [min, max)
+double uniform_rand_range(double min, double max) {
+    return min + (max - min) * uniform_rand();
+}
 
 int main() {
     float player_x, player_y;
     float coin_x[MAX_COINS], coin_y[MAX_COINS];
     unsigned int coin_collected = 0;
     int seed; // For random number generator
+    resolution_t display_res = RESOLUTION_320x240; // Set display resolution
 
     debug_init_emulog();
     debug_init_usblog();
 
     display_init(
-        RESOLUTION_320x240,
+        display_res,
         DEPTH_16_BPP,
         2,
         GAMMA_NONE,
@@ -80,13 +93,13 @@ int main() {
     rdpq_text_register_font(1, font);
 
     // Center player to center of screen
-    player_x = (320.0f/2.0f)-player->width/2.0f;
-    player_y = (240.0f/2.0f)-player->height/2.0f;
+    player_x = (display_res.width/2.0f)-player->width/2.0f;
+    player_y = (display_res.height/2.0f)-player->height/2.0f;
 
     // Scatter coins throughout the screen
     for (int i = 0; i < MAX_COINS; i++) {
-        coin_x[i] = rand() % (320-coin->width);
-        coin_y[i] = rand() % (240-coin->height);
+        coin_x[i] = uniform_rand_range(0, display_res.width - coin->width);
+        coin_y[i] = uniform_rand_range(0, display_res.height - coin->height);
     }
 
     while (1) {
@@ -144,8 +157,8 @@ int main() {
                 coin_y[i] + coin->height < player_y 
             )) {
                 // Teleports coin to different position
-                coin_x[i] = rand() % (disp->width - coin->width);
-                coin_y[i] = rand() % (disp->height - coin->height);
+                coin_x[i] = uniform_rand_range(0, disp->width - coin->width);
+                coin_y[i] = uniform_rand_range(0, disp->height - coin->height);
 
                 // Give player a coin anyways
                 coin_collected++;
