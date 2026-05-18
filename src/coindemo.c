@@ -114,15 +114,6 @@ int main() {
 
         joypad_poll();
         mixer_try_play(); // Required for playing sound
-
-        rdpq_blitparms_t background_blit_params = {
-            .cx = 0,
-            .cy = 0, 
-            .scale_x = (float)background->width / \
-            (float)((float)background->width / (float)disp->width),
-            .scale_y = (float)background->height / \
-            (float)((float)background->height / (float)disp->height)
-        };
         
         // 85.0f was picked because it is the practical maximum number when 
         // the joystick is shifted all the way in one direction
@@ -179,7 +170,7 @@ int main() {
 
         rdpq_attach(disp, NULL);
         rdpq_set_mode_copy(true);
-        rdpq_sprite_blit(background, 0, 0, &background_blit_params);
+        rdpq_sprite_blit(background, 0, 0, NULL);
         // Crude instancing draw coins code
         for (int i = 0; i < MAX_COINS; i++) {
             rdpq_sprite_blit(coin, coin_x[i], coin_y[i], NULL);
