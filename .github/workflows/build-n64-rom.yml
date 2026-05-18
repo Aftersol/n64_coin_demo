@@ -36,9 +36,9 @@ name: Build latest N64 2D Coin Demo ROM
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "high_res_test" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "high_res_test" ]
 
 jobs:
   build:
