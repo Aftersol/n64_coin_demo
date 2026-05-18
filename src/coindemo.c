@@ -108,10 +108,7 @@ int main() {
         joypad_inputs_t joypad_port_1 = joypad_get_inputs(JOYPAD_PORT_1);
         joypad_buttons_t button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
-        rdpq_blitparms_t background_blit_params = { 
-            .scale_x = background->width / (background->width / disp->width),
-            .scale_y = background->height / (background->height / disp->height)
-        };
+        rdpq_blitparms_t background_blit_params;
 
         float speed_x = 0.0f, speed_y = 0.0f;
 
@@ -119,6 +116,11 @@ int main() {
 
         joypad_poll();
         mixer_try_play(); // Required for playing sound
+
+        background_blit_params = { 
+            .scale_x = background->width / (background->width / disp->width),
+            .scale_y = background->height / (background->height / disp->height)
+        };
         
         // 85.0f was picked because it is the practical maximum number when 
         // the joystick is shifted all the way in one direction
