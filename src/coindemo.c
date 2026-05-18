@@ -74,8 +74,8 @@ int main() {
     dfs_init(DFS_DEFAULT_LOCATION);
     joypad_init();
     rdpq_init();
-    audio_init(48000, 3);
-    mixer_init(32);
+    audio_init(22050, 3);
+    mixer_init(4);
 
     // Random number generator initialization
     getentropy(&seed, sizeof(seed));
