@@ -115,7 +115,9 @@ int main() {
         joypad_poll();
         mixer_try_play(); // Required for playing sound
 
-        rdpq_blitparms_t background_blit_params = { 
+        rdpq_blitparms_t background_blit_params = {
+            .cx = 0,
+            .cy = 0, 
             .scale_x = background->width / (background->width / disp->width),
             .scale_y = background->height / (background->height / disp->height)
         };
