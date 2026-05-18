@@ -1,7 +1,7 @@
 /**
  * \file coindemo.c
  * \author Aftersol
- * \date 2026-05-14
+ * \date 2026-05-18
  * \brief A simple 2D coin collecting game example for libdragon.
  * 
  * This is free and unencumbered software released into the public domain.
@@ -97,6 +97,8 @@ int main() {
 
         float speed_x = 0.0f, speed_y = 0.0f;
 
+        while(!(disp = display_try_get())) {;}
+
         joypad_poll();
         mixer_try_play(); // Required for playing sound
         
@@ -124,14 +126,14 @@ int main() {
         if (player_x < 0.0f)
             player_x = 0.0f;
 
-        if (player_x > 320.0f - (float)player->width)
-            player_x = 320.0f - (float)player->width;
+        if (player_x > (float)disp->width - (float)player->width)
+            player_x = (float)disp->width - (float)player->width;
 
         if (player_y < 0.0f)
             player_y = 0.0f;
 
-        if (player_y > 240.0f - (float)player->height)
-            player_y = 240.0f - (float)player->height;
+        if (player_y > (float)disp->height - (float)player->height)
+            player_y = (float)disp->height - (float)player->height;
 
         // Iterate through coins to check if player touches them
         for (int i = 0; i < MAX_COINS; i++) {
@@ -142,8 +144,8 @@ int main() {
                 coin_y[i] + coin->height < player_y 
             )) {
                 // Teleports coin to different position
-                coin_x[i] = rand() % (320 - coin->width);
-                coin_y[i] = rand() % (240 - coin->height);
+                coin_x[i] = rand() % (disp->width - coin->width);
+                coin_y[i] = rand() % (disp->height - coin->height);
 
                 // Give player a coin anyways
                 coin_collected++;
@@ -152,8 +154,6 @@ int main() {
                 wav64_play(&coin_sound, 0);
             }
         }
-
-        while(!(disp = display_try_get())) {;}
 
         rdpq_attach(disp, NULL);
         rdpq_set_mode_copy(true);
@@ -165,7 +165,7 @@ int main() {
         rdpq_sprite_blit(player, player_x, player_y, NULL);
         rdpq_set_mode_standard();
                     rdpq_text_printf(&(rdpq_textparms_t) {
-                    .width = 320-32,
+                    .width = disp->width-32,
                     .align = ALIGN_LEFT,
                     .wrap = WRAP_WORD,
         }, 1, 32, 32, "Coins: %u", coin_collected);
