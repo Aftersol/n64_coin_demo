@@ -118,8 +118,10 @@ int main() {
         rdpq_blitparms_t background_blit_params = {
             .cx = 0,
             .cy = 0, 
-            .scale_x = background->width / (background->width / disp->width),
-            .scale_y = background->height / (background->height / disp->height)
+            .scale_x = (float)background->width / \
+            (float)((float)background->width / (float)disp->width),
+            .scale_y = (float)background->height / \
+            (float)((float)background->height / (float)disp->height)
         };
         
         // 85.0f was picked because it is the practical maximum number when 
