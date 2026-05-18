@@ -29,7 +29,7 @@ libdragon make
 
 ## Licenses
 
-Everything in the src folder is licensed under MIT License. See [LICENSE page](https://github.com/Aftersol/n64_qoi_dec/blob/main/LICENSE) for more info.
+Everything in the src folder is licensed under The Unlicense. See [LICENSE page](https://github.com/Aftersol/n64_coin_demo/blob/main/LICENSE) for more info.
 
 In the assets folder the following assets are in the public domain:
 - [hassekf - Tower Defense - Grass Background](https://opengameart.org/content/tower-defense-grass-background)
