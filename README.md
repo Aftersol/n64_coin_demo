@@ -32,7 +32,7 @@ libdragon make
 Everything in the src folder is licensed under The Unlicense. See [LICENSE page](https://github.com/Aftersol/n64_coin_demo/blob/main/LICENSE) for more info.
 
 In the assets folder the following assets are in the public domain:
-- player.png - Aftersol
-- coin.png - Aftersol
+- [player.png - Aftersol](./assets/player.png)
+- [coin.png - Aftersol](./assets/coin.png)
 - [hassekf - Tower Defense - Grass Background](https://opengameart.org/content/tower-defense-grass-background)
 - [Luke.RUSTLTD - 8-bit Coin Sound](https://opengameart.org/content/10-8bit-coin-sounds)
