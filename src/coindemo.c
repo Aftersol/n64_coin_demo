@@ -138,8 +138,8 @@ int main() {
         float length = sqrtf(dx * dx + dy * dy);
 
         if (length > 0.0f) {
-            dx / length;
-            dy / length;
+            dx /= length;
+            dy /= length;
         }
 
         player_x += dx * speed;
