@@ -30,6 +30,8 @@
  * For more information, please refer to <https://unlicense.org>
  * 
  * Credits:
+ *  - player.png - Aftersol
+ *  - coin.png - Aftersol
  *  - hassekf - Tower Defense - Grass Background
  *    https://opengameart.org/content/tower-defense-grass-background
  *  - Luke.RUSTLTD - 8-bit Coin Sound
