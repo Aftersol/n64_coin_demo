@@ -137,7 +137,7 @@ int main() {
         // Normalize so diagonal isn't faster (~1.41x)
         float length = sqrtf(dx * dx + dy * dy);
 
-        if (length > 0) {
+        if (length > 0.0f) {
             dx / length;
             dy / length;
         }
