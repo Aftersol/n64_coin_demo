@@ -39,6 +39,7 @@
 #include <libdragon.h>
 
 #include <stdlib.h>
+#include <math.h>
 
 #define MAX_COINS 10
 const float speed = 2.0f;
@@ -108,7 +109,7 @@ int main() {
         joypad_inputs_t joypad_port_1 = joypad_get_inputs(JOYPAD_PORT_1);
         joypad_buttons_t button_port_1 = joypad_get_buttons_held(JOYPAD_PORT_1);
 
-        float speed_x = 0.0f, speed_y = 0.0f;
+        float dx = 0.0f, dy = 0.0f;
 
         while(!(disp = display_try_get())) {;}
 
@@ -116,24 +117,33 @@ int main() {
         mixer_try_play(); // Required for playing sound
         
         // 85.0f was picked because it is the practical maximum number when 
-        // the joystick is shifted all the way in one direction
+        // the joystick is shifted all the way in one direction on 
+        // N64 controller
 
-        speed_x += (joypad_port_1.stick_x / 85.0f) * speed;
-        speed_y -= (joypad_port_1.stick_y / 85.0f) * speed;
+        dx += (joypad_port_1.stick_x / 85.0f);
+        dy -= (joypad_port_1.stick_y / 85.0f);
 
-        if (button_port_1.d_up || button_port_1.c_up) speed_y -= speed;
-        if (button_port_1.d_down || button_port_1.c_down) speed_y += speed;
-        if (button_port_1.d_left || button_port_1.c_left) speed_x -= speed;
-        if (button_port_1.d_right || button_port_1.c_right) speed_x += speed;
+        if (button_port_1.d_up || button_port_1.c_up) dy -= 1.0f;
+        if (button_port_1.d_down || button_port_1.c_down) dy += 1.0f;
+        if (button_port_1.d_left || button_port_1.c_left) dx -= 1.0f;
+        if (button_port_1.d_right || button_port_1.c_right) dx += 1.0f;
 
         // Clamp speed to make sure player don't go too fast
-        if (speed_x > speed) speed_x = speed;
-        if (speed_x < -speed) speed_x = -speed;
-        if (speed_y > speed) speed_y = speed;
-        if (speed_y < -speed) speed_y = -speed;
+        if (dx > 1.0f) dx = 1.0f;
+        if (dx < -1.0f) dx = -1.0f;
+        if (dy > 1.0f) dy = 1.0f;
+        if (dy < -1.0f) dy = -1.0f;
 
-        player_x += speed_x;
-        player_y += speed_y;
+        // Normalize so diagonal isn't faster (~1.41x)
+        float length = sqrtf(dx * dx + dy * dy);
+
+        if (length > 0) {
+            dx / length;
+            dy / length;
+        }
+
+        player_x += dx * speed;
+        player_y += dy * speed;
 
         // Clamp player position to prevent player from leaving screen
         if (player_x < 0.0f)
