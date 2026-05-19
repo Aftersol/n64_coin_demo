@@ -45,12 +45,12 @@
 const float speed = 2.0f;
 
 // Returns a uniform float in [0, 1)
-double uniform_rand() {
-    return (double)rand() / ((double)RAND_MAX + 1.0);
+float uniform_rand() {
+    return (float)rand() / ((float)RAND_MAX + 1.0);
 }
 
 // Returns a uniform float in [min, max)
-double uniform_rand_range(double min, double max) {
+float uniform_rand_range(float min, float max) {
     return min + (max - min) * uniform_rand();
 }
 
