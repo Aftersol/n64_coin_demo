@@ -32,20 +32,20 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-name: Build latest N64 2D Coin Demo ROM
+name: Build latest N64 2D Coin Demo ROM (trunk)
 
 on:
   push:
-    branches: [ "main", "high_res_test" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "high_res_test" ]
+    branches: [ "main" ]
 
 jobs:
   build:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/dragonminded/libdragon:preview
+      image: ghcr.io/dragonminded/libdragon:trunk
     steps:
       - uses: actions/checkout@v6
       - name: Install prerequisites
@@ -57,7 +57,7 @@ jobs:
         run: |
           REAL_DIR=`pwd`
           cd /tmp
-          git clone -b preview https://github.com/DragonMinded/libdragon.git --depth=1
+          git clone -b trunk https://github.com/DragonMinded/libdragon.git --depth=1
           cd libdragon
           make install -j $(nproc)
           make tools-install -j $(nproc)

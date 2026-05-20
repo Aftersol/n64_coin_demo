@@ -1,7 +1,7 @@
 /**
  * \file coindemo.c
  * \author Aftersol
- * \date 2026-05-18
+ * \date 2026-05-20
  * \brief A simple 2D coin collecting game example for libdragon.
  * 
  * This is free and unencumbered software released into the public domain.
