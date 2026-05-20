@@ -61,7 +61,7 @@ int main() {
     float coin_x[MAX_COINS], coin_y[MAX_COINS];
     unsigned int coin_collected = 0;
     int seed; // For random number generator
-    resolution_t display_res = RESOLUTION_640x480; // Set display resolution
+    resolution_t display_res = RESOLUTION_320x240; // Set display resolution
 
     debug_init_emulog();
     debug_init_usblog();
