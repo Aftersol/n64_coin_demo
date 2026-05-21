@@ -48,7 +48,7 @@ const float speed = 2.0f;
 
 // Returns a uniform float in [0, 1)
 float uniform_rand() {
-    return (float)rand() / ((float)RAND_MAX + 1.0);
+    return (float)rand() / ((float)RAND_MAX + 1.0f);
 }
 
 // Returns a uniform float in [min, max)
