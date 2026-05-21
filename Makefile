@@ -46,7 +46,7 @@ assets += $(ASSETS_DIR)/coin.wav64
 assets_conv = $(addprefix $(FILESYSTEM_DIR)/,$(notdir $(assets:%.png=%.sprite)))
 
 WAV64_AUDIOCONV_FLAGS ?= --wav-compress 1 --wav-mono --wav-resample 22050
-XM64_AUDIOCONV_FLAGS ?= --xm-compress-data 3 --xm-8bit
+XM64_AUDIOCONV_FLAGS ?=
 MKSPRITE_FLAGS ?=
 
 OBJS = $(BUILD_DIR)/coindemo.o
