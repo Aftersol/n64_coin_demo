@@ -1,7 +1,7 @@
 /**
  * \file coindemo.c
  * \author Aftersol
- * \date 2026-05-20
+ * \date 2026-05-29
  * \brief A simple 2D coin collecting game example for libdragon.
  * 
  * This is free and unencumbered software released into the public domain.
@@ -84,7 +84,8 @@ int main() {
     getentropy(&seed, sizeof(seed));
     srand(seed);
     register_VI_handler((void(*)(void))rand);
-
+    
+    lossysprite_init();
     sprite_t* background = sprite_load("rom:/background.sprite");
     sprite_t* player = sprite_load("rom:/player.sprite");
     sprite_t* coin = sprite_load("rom:/coin.sprite");
